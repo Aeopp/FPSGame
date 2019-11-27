@@ -6,7 +6,29 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "FPSObjectiveActor.h"
 #include "MyInterface.h"
+
+void AFPSCharacter::TempCall()
+{
+	FHitResult Hiter;
+	GetWorld()->LineTraceSingleByObjectType(Hiter, GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * 10000.f,
+	FCollisionObjectQueryParams::DefaultObjectQueryParam,
+		FCollisionQueryParams::DefaultQueryParam);
+	
+	
+	if(Hiter.GetActor()->Implements<UInterfaceClass>())
+	{
+		IInterfaceClass::Execute_TempFunc(Hiter.GetActor());
+	}
+}
+
+void AFPSCharacter::TempCall2()
+{
+	
+}
 
 AFPSCharacter::AFPSCharacter()
 {

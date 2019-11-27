@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InterfaceClass.h"
 #include "FPSObjectiveActor.generated.h"
 
 UCLASS()
-class FPSGAME_API AFPSObjectiveActor : public AActor
+class FPSGAME_API AFPSObjectiveActor : public AActor , public IInterfaceClass
 {
 	GENERATED_BODY()
 	
@@ -24,6 +25,10 @@ protected:
 	void PlayEffects();
 	UPROPERTY(EditDefaultsOnly,Category=Components)
 	class UParticleSystem* PickupFX;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TempFunc();
+	virtual void TempFunc_Implementation() override;
 public:	
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor)override;
 public:

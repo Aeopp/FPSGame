@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+
 #include "FPSGameMode.generated.h"
 
 UCLASS()
@@ -14,18 +15,17 @@ class AFPSGameMode : public AGameModeBase
 public:
 	AFPSGameMode();
 	void CompleteMission(APawn* InstigatorPawn);
-	
+
 	UFUNCTION(BlueprintImplementableEvent, Category = GameMode)
-	void OnMissionCompleted(APawn* InstigatorPawn);
+		void OnMissionCompleted(APawn* InstigatorPawn);
 
 	UPROPERTY(EditAnywhere, Category = "BP|Widget")
-	TSubclassOf<class UUserWidget>MissionCompleteWidget;
-	UPROPERTY(EditDefaultsOnly,Category="View|Target")
-	TSubclassOf<AActor> ViewTarget;
-	UPROPERTY(EditAnywhere,Category="View|BlendTime")
-	float ViewChangeBlendTime = 3.f;
+		TSubclassOf<class UUserWidget>MissionCompleteWidget;
+	UPROPERTY(EditDefaultsOnly, Category = "View|Target")
+		TSubclassOf<AActor> ViewTarget;
+	UPROPERTY(EditAnywhere, Category = "View|BlendTime")
+		float ViewChangeBlendTime = 3.f;
 
-	FORCEINLINE void Aaa() {};
 };
 
 

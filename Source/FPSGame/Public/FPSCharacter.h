@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyInterface.h"
+#include "InterfaceClass.h"
 #include "FPSCharacter.generated.h"
 
 class UInputComponent;
@@ -16,7 +17,7 @@ class UAnimSequence;
 
 
 UCLASS()
-class AFPSCharacter : public ACharacter
+class AFPSCharacter : public ACharacter 
 {
 	GENERATED_BODY()
 
@@ -35,7 +36,14 @@ protected:
 	UCameraComponent* CameraComponent;
 
 public:
+	
+	UFUNCTION(BlueprintCallable)
+	void TempCall();
+
+	UFUNCTION(BlueprintCallable)
+	void TempCall2();
 	AFPSCharacter();
+
 
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category="Projectile")
@@ -53,9 +61,6 @@ public:
 	bool bIsCarryingObjective;
 	
 
-	UFUNCTION(BlueprintCallable)
-	void Call() { UMyInterface::OKOK(); };
-	
 	UFUNCTION(BlueprintPure)
 	UPARAM(ref) FVector& PurePure(UPARAM(ref,DisplayName=Temp)FVector& Param)
 	{

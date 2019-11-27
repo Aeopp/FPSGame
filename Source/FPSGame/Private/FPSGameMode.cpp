@@ -8,6 +8,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include "UserWidget.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+
 
 AFPSGameMode::AFPSGameMode()
 {

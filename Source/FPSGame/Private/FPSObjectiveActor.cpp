@@ -31,8 +31,10 @@ void AFPSObjectiveActor::PlayEffects()
 	UGameplayStatics::SpawnEmitterAtLocation
 	(this, PickupFX, GetActorLocation());
 }
-
-
+void AFPSObjectiveActor::TempFunc_Implementation()
+{
+	UE_LOG(LogTemp, Error, TEXT("void AFPSObjectiveActor::TempFunc_Implementation()"));
+}
 void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor * OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
@@ -47,4 +49,8 @@ void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor * OtherActor)
 	
 	this->Destroy();
 }
+
+
+
+
 
