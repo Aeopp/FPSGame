@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ExtractionZone.h"
@@ -51,17 +52,14 @@ void AExtractionZone::HandleOverlap
 	UE_LOG(LogTemp, Error, TEXT("Overlapped Extration ZOne !! "));
 	
 	auto MyPawn = Cast<AFPSCharacter>(OtherActor);
-	if (MyPawn == nullptr)return;
+	if (MyPawn==nullptr) return;
 	
-	if (MyPawn->bIsCarryingObjective)
+	if (auto GM = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()) )
 	{
-		if (auto GM = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
-		{
-			GM->CompleteMission(MyPawn);
-		}
-	}
-	else if(MyPawn->bIsCarryingObjective==false)
-	{
+		bool bIsSuccess = MyPawn->bIsCarryingObjective; 
+		GM->CompleteMission(MyPawn,bIsSuccess);
+
+		if(bIsSuccess ==false)
 		UGameplayStatics::PlaySound2D(this, ObjectiveMissingSound);
 	}
 }

@@ -30,8 +30,18 @@ public:
 	class UPawnSensingComponent* PawnSensingComp;
 
 	UFUNCTION(Category=DelegateBind)
-	void  OnSeePawnEvent(APawn*  Pawn); 
-/*
-	UPROPERTY(EditAnywhere, Category = "Anim|Sequence")
-	class UAnimSequence* AnimSeq;*/
+	void  OnSeePawnEvent(APawn*  Pawn);
+	UFUNCTION(Category = DelegateBind)
+	void OnHearNoiseDelegateEvent(
+	APawn*  NoiseInstigator ,const FVector&  Location,float Volume);
+
+	private:
+	FTimerHandle RotReturnTimer;
+	UFUNCTION()
+	void RotReturnOrient();
+
+	UFUNCTION()
+	void MissionFail(APawn* const DetectedPawn);
+
+	FRotator OrientRotation;
 };

@@ -14,18 +14,17 @@ class AFPSGameMode : public AGameModeBase
 
 public:
 	AFPSGameMode();
-	void CompleteMission(APawn* InstigatorPawn);
+	void CompleteMission(APawn* InstigatorPawn,bool bIsMissionCompleted);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = GameMode)
-		void OnMissionCompleted(APawn* InstigatorPawn);
+		void OnMissionCompleted(APawn* InstigatorPawn, bool bIsMissionCompleted);
 
 	UPROPERTY(EditAnywhere, Category = "BP|Widget")
-		TSubclassOf<class UUserWidget>MissionCompleteWidget;
+	TSubclassOf<class UUserWidget>MissionCompleteWidget;
 	UPROPERTY(EditDefaultsOnly, Category = "View|Target")
-		TSubclassOf<AActor> ViewTarget;
+	TSubclassOf<AActor> ViewTarget;
 	UPROPERTY(EditAnywhere, Category = "View|BlendTime")
-		float ViewChangeBlendTime = 3.f;
-
+	float ViewChangeBlendTime = 3.f;
 };
 
 

@@ -27,11 +27,10 @@ ALaunchPad::ALaunchPad()
 	BoxComp->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 	BoxComp->InitBoxExtent(FVector(100.f, 100.f, 100.f));
 
-	static auto SetParticle =  ConstructorHelpers::FObjectFinder<UParticleSystem>(TEXT("ParticleSystem'/Game/Effects/gold_ore_lost.gold_ore_lost'"));
+	static auto SetParticle = ConstructorHelpers::FObjectFinder<UParticleSystem					>(TEXT("ParticleSystem'/Game/Effects/gold_ore_lost.gold_ore_lost'"));
 	if (SetParticle.Succeeded())
 	{
 		ParticleSystem = SetParticle.Object;
-		
 	}
 	else
 		UE_LOG(LogTemp, Error, TEXT("Particle COnstrucotr FInder Fail"));

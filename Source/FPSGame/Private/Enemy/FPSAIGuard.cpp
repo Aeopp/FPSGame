@@ -5,9 +5,12 @@
 #include "Perception/PawnSensingComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimSequence.h"
-
+#include "DrawDebugHelpers.h"
 #include "ConstructorHelpers.h"
 #include "Components/CapsuleComponent.h"
+#include "TimerManager.h"
+#include "FPSGameMode.h"
+#include "Kismet/KismetMathLibrary.h"
 // Sets default values
 AFPSAIGuard::AFPSAIGuard()
 {
@@ -35,15 +38,17 @@ AFPSAIGuard::AFPSAIGuard()
 	PawnSensingComp->SightRadius = 3100.f;
 	PawnSensingComp->SetPeripheralVisionAngle(32.f);
 	
-	PawnSensingComp->OnSeePawn.AddDynamic(this,&AFPSAIGuard::OnSeePawnEvent);
-	
+	PawnSensingComp->OnSeePawn.AddDynamic
+	(this,&AFPSAIGuard::OnSeePawnEvent);
+	PawnSensingComp->OnHearNoise.AddDynamic
+	(this, &AFPSAIGuard::OnHearNoiseDelegateEvent);
 }
 
 // Called when the game starts or when spawned
 void AFPSAIGuard::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	OrientRotation = GetActorRotation();
 }
 
 // Called every frame
@@ -62,8 +67,48 @@ void AFPSAIGuard::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void AFPSAIGuard::OnSeePawnEvent(APawn* Pawn)
 {
 	if(Pawn)
+	{	
+		DrawDebugLine(GetWorld(), GetActorLocation(), 
+			Pawn->GetActorLocation(),
+			FColor::Blue, false, 3.f);
+		MissionFail(Pawn);
+	}
+}
+void AFPSAIGuard::OnHearNoiseDelegateEvent
+(APawn* NoiseInstigator, const FVector& Location, float Volume)
+{
+	if(NoiseInstigator)
 	{
+		DrawDebugSphere(GetWorld(), 
+		Location,
+		30.f, 12, FColor::Yellow, 
+		false, 3.f);
+
+		FVector Direction =  Location - GetActorLocation(); 
+		Direction = Direction.GetSafeNormal(KINDA_SMALL_NUMBER);
 		
+		FRotator DirRot = FRotationMatrix::MakeFromX(Direction).Rotator();
+		DirRot.Pitch = 0.f;
+		DirRot.Roll = 0.f;
+		SetActorRotation(DirRot);
+
+		GetWorld()->GetTimerManager().ClearTimer(RotReturnTimer);
+		GetWorld()->GetTimerManager().SetTimer(RotReturnTimer, this, &AFPSAIGuard::RotReturnOrient, 3.f, false);
+		// MissionFail(NoiseInstigator);
+	}
+}
+void AFPSAIGuard::RotReturnOrient()
+{
+	SetActorRotation(this->OrientRotation);
+}
+
+void AFPSAIGuard::MissionFail(APawn* const DetectedPawn)
+{
+	AFPSGameMode *  GM = Cast<AFPSGameMode >(GetWorld()->GetAuthGameMode());
+	
+	if (DetectedPawn && GM ) 
+	{
+		GM->CompleteMission(DetectedPawn, false);	
 	}
 }
 

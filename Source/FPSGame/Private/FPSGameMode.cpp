@@ -6,7 +6,7 @@
 #include "FPSHUD.h"
 #include "FPSCharacter.h"
 #include "UObject/ConstructorHelpers.h"
-#include "UserWidget.h"
+#include "Widget/MissionResult.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -35,22 +35,24 @@ AFPSGameMode::AFPSGameMode()
 	// use our custom HUD class
 	HUDClass = AFPSHUD::StaticClass();
 }
-void AFPSGameMode::CompleteMission(APawn* InstigatorPawn)
+void AFPSGameMode::CompleteMission(APawn* InstigatorPawn, bool bIsMissonCompleted)
 {
 	if(InstigatorPawn)
 	{
 		InstigatorPawn->DisableInput(nullptr); 
 	}
-	
-// 	this->OnMissionCompleted(InstigatorPawn);
+
+	// 블루프린트 구현 이벤트로 하고싶다면 !!
+
 	
 	if (auto PC = Cast<APlayerController>(InstigatorPawn->GetController()))
 	{
 		TArray<AActor*> Cameras;
 
-		if (auto AddViewPort = CreateWidget<UUserWidget>(PC,*MissionCompleteWidget))
+		if (auto AddViewPort = CreateWidget<UMissionResult>(PC,*MissionCompleteWidget))
 		{
 			AddViewPort->AddToViewport();
+			AddViewPort->SetMissionResult(bIsMissonCompleted);
 		}
 		
 		if (ViewTarget)
@@ -63,4 +65,6 @@ void AFPSGameMode::CompleteMission(APawn* InstigatorPawn)
 			, 0, false);
 		}
 	}
+
+	this->OnMissionCompleted(InstigatorPawn,bIsMissonCompleted);
 }

@@ -35,8 +35,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NoiseEmitter")
+	class UPawnNoiseEmitterComponent*  NoiseEmitterComponent;
 public:
-	
+	virtual void Tick(float DeltaSec)override;
 	UFUNCTION(BlueprintCallable)
 	void TempCall();
 
@@ -85,6 +87,11 @@ public:
 
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
-
+private:
+	FORCEINLINE void NoiseMake()
+	{
+		PawnMakeNoise(1.0f, GetActorLocation(),
+		true, this);
+	}
 };
 

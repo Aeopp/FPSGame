@@ -33,14 +33,14 @@ private:
 	TArray<AActor*> Targets;
 	
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = Valilaible, meta = (AllowprivateAccess = true))
-		bool bIsZOverride = false;
+	bool bIsZOverride = false;
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = Valilaible, meta = (AllowprivateAccess = true))
-		bool bIsXYOverride = false;
+	bool bIsXYOverride = false;
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = Valilaible, meta = (AllowprivateAccess = true))
 	FVector LaunchForce = FVector(0, 0, 3000000.f);
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = Valilaible, meta = (AllowprivateAccess = true))
-		float ImpulseForce = 1000.f;
+	float ImpulseForce = 1000.f;
 	
 	UPROPERTY(EditInstanceOnly,BlueprintReadWrite,Category=Comp, meta = (AllowprivateAccess = true))
 	class UArrowComponent* LaunchArrowComp;

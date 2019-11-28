@@ -5,10 +5,16 @@
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "FPSObjectiveActor.h"
 #include "MyInterface.h"
+
+void AFPSCharacter::Tick(float DeltaSec)
+{
+	//this->NoiseMake();
+}
 
 void AFPSCharacter::TempCall()
 {
@@ -32,6 +38,9 @@ void AFPSCharacter::TempCall2()
 
 AFPSCharacter::AFPSCharacter()
 {
+	this->NoiseEmitterComponent = CreateDefaultSubobject
+	<UPawnNoiseEmitterComponent>(TEXT("NoiseComp"));
+	
 	// Create a CameraComponent	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	CameraComponent->SetupAttachment(GetCapsuleComponent());
@@ -80,6 +89,7 @@ void AFPSCharacter::Fire()
 		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ActorSpawnParams.Instigator = this;
 
 		// spawn the projectile at the muzzle
 		GetWorld()->SpawnActor<AFPSProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
@@ -108,6 +118,7 @@ void AFPSCharacter::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
+		
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), Value);
 	}
