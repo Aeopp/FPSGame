@@ -4,6 +4,7 @@
 #include "Components/CanvasPanel.h"
 #include "Components/TextBlock.h"
 #include "Components/CanvasPanelSlot.h"
+
 void UMissionResult::SetMissionResult(bool bIsMissionResult)
 {
 	FString Result = bIsMissionResult ? TEXT("Mission Success !! ") : TEXT("Mission Fail !! ");

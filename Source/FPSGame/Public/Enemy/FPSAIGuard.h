@@ -5,6 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "FPSAIGuard.generated.h"
+UENUM(BlueprintType)
+enum class EAIState : uint8
+{
+	Idle,
+	Suspicious,
+	Alerted,
+};
 
 UCLASS()
 class FPSGAME_API AFPSAIGuard : public ACharacter
@@ -26,16 +33,36 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = Comps)
 	class UPawnSensingComponent* PawnSensingComp;
+
+	EAIState GuardState;
+	FORCEINLINE void SetGuardState(EAIState AIState)
+	{
+		if (GuardState  == AIState)  return;
+		
+		GuardState = AIState;
+
+		OnstateChanged(AIState); 
+	}
+	
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category = AI)
+	void OnstateChanged(EAIState NewState);
+	virtual void OnstateChanged_Implementation(EAIState NewState);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widget|State")
+	class UWidgetComponent* StateWidget;
 
 	UFUNCTION(Category=DelegateBind)
 	void  OnSeePawnEvent(APawn*  Pawn);
 	UFUNCTION(Category = DelegateBind)
-	void OnHearNoiseDelegateEvent(
-	APawn*  NoiseInstigator ,const FVector&  Location,float Volume);
-
-	private:
+	void OnHearNoiseDelegateEvent
+	(APawn*  NoiseInstigator ,const FVector&  Location,float Volume);
+public:
+	
+	FRotator LookRot;
 	FTimerHandle RotReturnTimer;
 	UFUNCTION()
 	void RotReturnOrient();
@@ -43,5 +70,17 @@ public:
 	UFUNCTION()
 	void MissionFail(APawn* const DetectedPawn);
 
-	FRotator OrientRotation;
+	FRotator StartRotation;
+
+	int32 CurrentPatrolIndex = 0;
+	UPROPERTY(EditInstanceOnly, Category = AI)
+	TArray<class ATargetPoint*> PatrolLocs;
+	void PatrolMove();
+protected:
+	UPROPERTY(EditInstanceOnly, Category = AI)
+	bool bIsPartol = false;
+
+	FTimerHandle PatrolTimer;
+	
+	void PatrolStop();
 };
