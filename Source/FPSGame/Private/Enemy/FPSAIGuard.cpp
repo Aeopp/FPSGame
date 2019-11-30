@@ -16,6 +16,7 @@
 #include "AI/PatrolTargetPoint.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "AI/Navigation/NavigationSystem.h"
+#include "UnrealNetwork.h"
 #include <utility>
 
 
@@ -106,7 +107,12 @@ void AFPSAIGuard::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void AFPSAIGuard::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
+	DOREPLIFETIME(AFPSAIGuard, GuardState);
+}
+
+void AFPSAIGuard::OnRep_GuardState()
+{
+	OnstateChanged(this->GuardState);
 }
 
 void AFPSAIGuard::OnSeePawnEvent(APawn* Pawn)

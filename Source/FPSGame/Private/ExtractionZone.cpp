@@ -8,6 +8,7 @@
 #include "FPSCharacter.h"
 #include "FPSGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "FPSGameState.h"
 // Sets default values
 AExtractionZone::AExtractionZone()
 {
@@ -53,14 +54,18 @@ void AExtractionZone::HandleOverlap
 	
 	auto MyPawn = Cast<AFPSCharacter>(OtherActor);
 	if (MyPawn==nullptr) return;
+
+	bool bIsSuccess = MyPawn->bIsCarryingObjective;
+	if (bIsSuccess == false)
+		UGameplayStatics::PlaySound2D(this, ObjectiveMissingSound);
+
 	
 	if (auto GM = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()) )
 	{
-		bool bIsSuccess = MyPawn->bIsCarryingObjective; 
 		GM->CompleteMission(MyPawn,bIsSuccess);
 
-		if(bIsSuccess ==false)
-		UGameplayStatics::PlaySound2D(this, ObjectiveMissingSound);
+		/*if(bIsSuccess ==false)
+		UGameplayStatics::PlaySound2D(this, ObjectiveMissingSound);*/
 	}
 }
 

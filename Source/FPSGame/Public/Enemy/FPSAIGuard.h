@@ -38,14 +38,22 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = Comps)
 	class UPawnSensingComponent* PawnSensingComp;
 
+	UPROPERTY(ReplicatedUsing=OnRep_GuardState)
 	EAIState GuardState;
+	UFUNCTION()
+	void OnRep_GuardState();
+	
 	FORCEINLINE void SetGuardState(EAIState AIState)
 	{
-		if (GuardState  == AIState)  return;
+		if (Role != ROLE_Authority)return;
 		
-		GuardState = AIState;
+		if (GuardState  == AIState)return;
 
-		OnstateChanged(AIState); 
+		GuardState = AIState;
+		OnRep_GuardState();
+		// OnstateChanged(AIState);
+		// OnRep_GuardState();
+	     // OnstateChanged(AIState);
 	}
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category = AI)

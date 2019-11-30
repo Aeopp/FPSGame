@@ -39,6 +39,7 @@ protected:
 	class UPawnNoiseEmitterComponent*  NoiseEmitterComponent;
 public:
 	virtual void Tick(float DeltaSec)override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	UFUNCTION(BlueprintCallable)
 	void TempCall();
 
@@ -58,10 +59,10 @@ public:
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 	UAnimSequence* FireAnimation;
+
 	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(Replicated,VisibleAnywhere,BlueprintReadOnly, Category = "Gameplay")
 	bool bIsCarryingObjective;
-	
 
 	UFUNCTION(BlueprintPure)
 	UPARAM(ref) FVector& PurePure(UPARAM(ref,DisplayName=Temp)FVector& Param)

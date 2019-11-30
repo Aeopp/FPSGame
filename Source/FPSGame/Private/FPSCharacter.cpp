@@ -10,6 +10,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "FPSObjectiveActor.h"
 #include "MyInterface.h"
+#include "UnrealNetwork.h"
 
 void AFPSCharacter::Tick(float DeltaSec)
 {
@@ -17,6 +18,12 @@ void AFPSCharacter::Tick(float DeltaSec)
 	FRotator NewRot = CameraComponent->RelativeRotation;
 	NewRot.Pitch = RemoteViewPitch * 360.f / 255.f;
 	CameraComponent->SetRelativeRotation(NewRot); 
+}
+
+void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AFPSCharacter, bIsCarryingObjective);
 }
 
 void AFPSCharacter::TempCall()
@@ -83,6 +90,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AFPSCharacter::Fire()
 {
+	ServerFire();
 	// try and fire a projectile
 	// try and play the sound if specified
 	if (FireSound)
